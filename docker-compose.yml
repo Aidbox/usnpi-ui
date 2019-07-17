@@ -1,0 +1,31 @@
+version: '3.1'
+services:
+  devbox:
+    image: "healthsamurai/devbox:0.4.5"
+    depends_on:
+      - devbox-db
+    links:
+      - "devbox-db:database"
+    ports:
+      - "8888:8888"
+    environment:
+      AIDBOX_FHIR_VERSION: 4.0.0
+      AIDBOX_PORT: 8888
+      AIDBOX_LICENSE_ID: $AIDBOX_LICENSE_ID
+      AIDBOX_LICENSE_KEY: $AIDBOX_LICENSE_KEY
+      AIDBOX_CLIENT_ID: $APP_INIT_CLIENT_ID
+      AIDBOX_CLIENT_SECRET: $APP_INIT_CLIENT_SECRET
+      AIDBOX_BASE_URL: http://127.0.0.1:8888
+      PGHOST: database
+      PGDATABASE: devbox
+      PGPORT: 5432
+      PGUSER: postgres
+      PGPASSWORD: postgres
+  devbox-db:
+    image: "aidbox/db:11.1.0"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER:     postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB:       devbox

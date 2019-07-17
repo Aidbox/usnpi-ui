@@ -1,0 +1,12 @@
+export APP_INIT_URL=http://localhost:8888
+export APP_INIT_CLIENT_ID=app
+export APP_INIT_CLIENT_SECRET=secret
+export APP_ID=search-app
+export APP_DEBUG=true
+export APP_HOST=http://localhost:3000/aidbox-app
+export APP_URL=http://localhost:1234
+export APP_CLIENT_ID=ui
+export APP_PORT=3000
+export APP_SECRET=secret
+export AIDBOX_LICENSE_ID=
+export AIDBOX_LICENSE_KEY=
