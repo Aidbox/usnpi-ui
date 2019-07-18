@@ -3,3 +3,7 @@
 .hidden {
   display: none;
 }
+
+.content {
+  margin: 1rem;
+}

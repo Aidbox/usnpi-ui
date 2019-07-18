@@ -42,10 +42,12 @@ export const Logout = () => {
 }
 
 export const Login = ({ location: { search } }) => {
+  console.log(site_url);
   const [error, setError] = useState(null)
   const { dispatch, user } = useStoreon('user')
   useEffect(() => {
     const { code } = parse(search.slice(1))
+    console.log(site_url);
     const getData = async () => {
       const res = await fetch(`${site_url}/auth/token`, {
         method: 'POST',
@@ -59,6 +61,7 @@ export const Login = ({ location: { search } }) => {
           audience: site_url
         })
       })
+      console.log(res);
       const data = await res.json()
       if (res.status !== 200) {
         console.log(data)

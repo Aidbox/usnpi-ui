@@ -9,6 +9,7 @@ import Header from './components/Header';
 import PrivateRoute from './components/PrivateRoute';
 import { Login, Logout } from './components/User';
 import NotFound from './components/NotFound';
+import { SearchResource } from './components/Search';
 
 const App = () => (
   <Layout>
@@ -23,7 +24,7 @@ const App = () => (
         }}
       >
         <Switch>
-          <PrivateRoute path="/" exact component={() => <div >Hello World!</div>} />
+          <PrivateRoute path="/" exact component={SearchResource} />
           <Route path="/login" component={Login} />
           <Route path="/logout" component={Logout} />
           <Route component={NotFound} />

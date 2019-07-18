@@ -8,7 +8,6 @@
   ],
   "watch": [
     "index.js",
-    "calculate.js",
     "server/"
   ],
   "env": {
