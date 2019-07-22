@@ -5,5 +5,24 @@
 }
 
 .content {
-  margin: 1rem;
+  margin-left: 4rem;
+  margin-right: 4rem;
+  margin-bottom: 1rem;
 }
+
+.container {
+  display: flex;
+}
+
+.name {
+  width: 40%;
+}
+
+.qual {
+  width: 50%;
+}
+
+.det {
+  width: 10%;
+}
+
