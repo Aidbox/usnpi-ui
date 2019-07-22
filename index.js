@@ -1,4 +1,4 @@
-const aidbox = require('aidbox')
+const aidbox = require('aidbox');
 
 const init_context = {
   debug: process.env.APP_DEBUG,
@@ -25,35 +25,22 @@ async function prepareClientPolicy(context) {
         entry: [
           {
             resource: {
-              auth: {
-                authorization_code: {
-                  redirect_uri: `${process.env.APP_URL}/login`
-                }
-              },
-              secret: process.env.APP_SECRET,
-              first_party: true,
-              grant_types: ['authorization_code'],
-              id: process.env.APP_INIT_CLIENT_ID,
-              resourceType: 'Client'
-            },
-            request: {
-              method: 'PUT',
-              url: `/Client/${process.env.APP_CLIENT_ID}`
-            }
-          },
-          {
-            resource: {
-              link: [{
-                id: process.env.APP_CLIENT_ID,
-                resourceType: 'Client'
-              }],
-              engine: 'allow',
-              id: `allow-${process.env.APP_CLIENT_ID}`,
+              engine: 'json-schema',
+              id: `allow-all`,
+              schema:
+                {
+                  required: ['request-method'],
+                  properties: {
+                    'request-method': {
+                      const: 'get',
+                    }
+                  }
+                },
               resourceType: 'AccessPolicy'
             },
             request: {
               method: 'PUT',
-              url: `/AccessPolicy/allow-${process.env.APP_CLIENT_ID}`
+              url: `/AccessPolicy/allow-all`
             }
           }
         ]
