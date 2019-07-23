@@ -1,28 +1,45 @@
 @import '../node_modules/antd/dist/antd.css';
 
+@border-radius-base: 0;
+
 .hidden {
   display: none;
 }
 
 .content {
-  margin-left: 4rem;
-  margin-right: 4rem;
-  margin-bottom: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 2rem;
 }
 
 .container {
   display: flex;
+  line-height: 20px;
+}
+
+.container#desc {
+  justify-content: space-between;
 }
 
 .name {
-  width: 40%;
+  width: 50%;
+  font-size: 16px;
 }
 
 .qual {
+  font-size: 14px;
   width: 50%;
 }
 
 .det {
-  width: 10%;
+  width: 20%;
+  text-align: right;
 }
 
+.address {
+  font-size: 13px;
+}
+
+.id {
+  font-size: 14px;
+}

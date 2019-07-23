@@ -8,24 +8,24 @@ import NotFound from './components/NotFound';
 import { SearchResource } from './components/Search';
 
 const App = () => (
-  <Layout>
-    <Content style={{ padding: '0 50px' }}>
+  <div style={{
+    background: '#eee',
+    minHeight: '100vh',
+  }}>
       <div
         style={{
           background: '#fff',
-          padding: 24,
-          minHeight: 380,
-          marginTop: '16px'
+          marginLeft: '20%',
+          marginRight: '20%',
+          paddingTop: '1rem',
         }}
       >
         <Switch>
           <Route path="/" exact component={SearchResource} />
           <Route component={NotFound} />
         </Switch>
-      </div>
-      <Footer style={{ textAlign: 'center' }} />
-    </Content>
-  </Layout>
+  </div>
+  </div>
 );
 
 export default App;
