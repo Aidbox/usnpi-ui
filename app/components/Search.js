@@ -15,10 +15,10 @@ export const SearchResource = () => {
   const [page, setPage] = useState(0);
 
   const highlight = () => {
-    let sel = document.querySelectorAll('.name, .qual, .info');
+    let sel = document.querySelectorAll('.name, .qual, .info, .det');
     let words = search;
-    var regex = RegExp(words, 'gi');
-    var replacement = '<span class="marker">'+words.toUpperCase()+'</span>';
+    let regex = RegExp(words, 'gi');
+    let replacement = '<span class="marker">'+words.toUpperCase()+'</span>';
     for (let i = 0; i < sel.length; i++) {
       let inner = sel[i].textContent.replace(regex, replacement);
       sel[i].innerHTML = inner;
@@ -48,7 +48,6 @@ export const SearchResource = () => {
     <div className="content">
       <Tabs defaultActiveKey='1' >
         <TabPane tab="Practitioner" key="1">
-          <Input type="button" onClick={() => highlight()}/>
           <Search placeholder="Search..." style={{marginBottom: '6px'}} enterButton="Search" size="large" onSearch={value => getData(value)} />
           <Accordion>
             <List size="large" pagination={{pageSize: 10, onChange: ((page, size) => setPage(page))}} dataSource={result} renderItem={ (item, i) => (
@@ -67,7 +66,7 @@ export const SearchResource = () => {
                       description={
                         <div className="row" id="desc">
                           <div className="info">
-                            {item.resource.address[0].line + ', ' + item.resource.address[0].city + ', ' + item.resource.address[0].state}&nbsp;&nbsp;{item.resource.telecom[0].value}
+                            {item.resource.address[0].line + ', ' + item.resource.address[0].city + ', ' + item.resource.address[0].state + ' Tel. ' + item.resource.telecom[0].value}
                           </div>
                           <div className="info">
                             {item.resource.identifier[0].value}
@@ -77,6 +76,22 @@ export const SearchResource = () => {
                   </Accordion.Toggle>
                   <Accordion.Collapse eventKey={i}>
                     <Card.Body>
+                      <Descriptions >
+                        <Descriptions.Item label="Full name" >
+                          {item.resource.name.map(name => (
+                            <div>
+                              {name.prefix && name.prefix.join('/') + ' '}
+                              <span className="det">{name.given.join(' ') + ' ' + name.family}</span>
+                              {name.suffix && ' ' + name.suffix.join('/')}
+                            </div>))}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Gender">
+                          {item.resource.gender}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Address">
+                          {item.resource.address.map(adr => (<div className="det">{adr.line.join('/') + ', ' + adr.city + ', ' + adr.state + ' ' + adr.postalCode}</div>))}
+                        </Descriptions.Item>
+                      </Descriptions>
                     </Card.Body>
                   </Accordion.Collapse>
                 </Card>
