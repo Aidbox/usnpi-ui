@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Input, List, Tabs, Descriptions, Table, Collapse } from 'antd';
 import { site_url } from '../config';
 import useStoreon from 'storeon/react';
+import Accordion from 'react-bootstrap/Accordion';
+import Card from 'react-bootstrap/Card';
 
 const { Search } = Input;
 const { TabPane } = Tabs;
@@ -9,16 +11,35 @@ const { Panel } = Collapse;
 
 export const SearchResource = () => {
   const [result, setResult] = useState([]);
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(0);
+
+  const highlight = () => {
+    let sel = document.querySelectorAll('.name, .qual, .info');
+    let words = search;
+    var regex = RegExp(words, 'gi');
+    var replacement = '<span class="marker">'+words.toUpperCase()+'</span>';
+    for (let i = 0; i < sel.length; i++) {
+      let inner = sel[i].textContent.replace(regex, replacement);
+      sel[i].innerHTML = inner;
+    }
+  };
+
+  useEffect(() => {
+    highlight();
+  });
+
   const getData = input => {
-      let query = `${site_url}/Practitioner`;
-      if (input != '')
-        query = query +
-        `/$lookup?name=lk&by=name.family,name.given,identifier.value;address.city,address.state,qualification.code.text;address.line&q=${input}&sort=name.family,name.given`;
-      fetch(query)
-        .then(r => r.json())
-        .then(d => {
-          setResult(d.entry);
-        });
+    setSearch(input);
+    let query = `${site_url}/Practitioner`;
+    if (input != '')
+      query = query +
+      `/$lookup?name=lk&by=name.family,name.given,identifier.value;address.city,address.state,qualification.code.text;address.line&q=${input}&sort=name.family,name.given`;
+    fetch(query)
+      .then(r => r.json())
+      .then(d => {
+        setResult(d.entry);
+      });
   };
 
   console.log(result);
@@ -27,35 +48,41 @@ export const SearchResource = () => {
     <div className="content">
       <Tabs defaultActiveKey='1' >
         <TabPane tab="Practitioner" key="1">
+          <Input type="button" onClick={() => highlight()}/>
           <Search placeholder="Search..." style={{marginBottom: '6px'}} enterButton="Search" size="large" onSearch={value => getData(value)} />
-          <List size="large" pagination={{pageSize: 10}} dataSource={result} renderItem={ (item, i) => (
-            <Collapse bordered={false}>
-              <Panel showArrow={false} key={i} header={
-                <List.Item >
-                  <List.Item.Meta
-                    title={
-                      <div className="container">
-                        <div className="name">
-                          {item.resource.name[0].given.join(' ') + ' ' + item.resource.name[0].family}
+          <Accordion>
+            <List size="large" pagination={{pageSize: 10, onChange: ((page, size) => setPage(page))}} dataSource={result} renderItem={ (item, i) => (
+              <List.Item className="me">
+                <Card style={{width: "100%", background: '#fff', border: 0}}>
+                  <Accordion.Toggle as={Card.Header} eventKey={i} style={{padding: "0px 3px", background: '#fff', border: 0}}>
+                    <List.Item.Meta
+                      title={
+                        <div className="row">
+                          <div className="name">
+                            {item.resource.name[0].given.join(' ') + ' ' + item.resource.name[0].family}
+                          </div>
+                          <div className="qual">{item.resource.qualification[0].code.text.toUpperCase()}</div>
                         </div>
-                        <div className="qual">{item.resource.qualification[0].code.text}</div>
-                      </div>
-                    }
-                    description={
-                      <div className="container" id="desc">
-                        <div className="info">
-                          {item.resource.address[0].line + ', ' + item.resource.address[0].city + ', ' + item.resource.address[0].state}&nbsp;&nbsp;{item.resource.telecom[0].value}
+                      }
+                      description={
+                        <div className="row" id="desc">
+                          <div className="info">
+                            {item.resource.address[0].line + ', ' + item.resource.address[0].city + ', ' + item.resource.address[0].state}&nbsp;&nbsp;{item.resource.telecom[0].value}
+                          </div>
+                          <div className="info">
+                            {item.resource.identifier[0].value}
+                          </div>
                         </div>
-                        <div className="info">
-                          {item.resource.identifier[0].value}
-                        </div>
-                      </div>
-                    } />
-                </List.Item>}>
-                {i}
-              </Panel>
-            </Collapse>
-          )}/>
+                      } />
+                  </Accordion.Toggle>
+                  <Accordion.Collapse eventKey={i}>
+                    <Card.Body>
+                    </Card.Body>
+                  </Accordion.Collapse>
+                </Card>
+              </List.Item>
+            )}/>
+          </Accordion>
         </TabPane>
         <TabPane tab="Organization" key="2">
         </TabPane>

@@ -7,6 +7,7 @@ import history from './history'
 import store from './store';
 
 import './index.css';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import App from './App'
 
 const initApp = () => (
