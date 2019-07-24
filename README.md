@@ -1,6 +1,6 @@
 # Resource search app
 
-This app can search Practitioner resources
+This app can search Practitioner and Organization resources
 
 ## Dev
 - install deps `npm i`
