@@ -30,7 +30,7 @@
 }
 
 .qual {
-  font-size: 13px;
+  font-size: 14px;
   width: 50%;
 }
 
@@ -40,6 +40,12 @@
 
 .phone {
   font-size: 14px;
+}
+
+.orgname {
+  width: 100%;
+  font-size: 16px;
+  padding-bottom: 2px;
 }
 
 .ant-collapse > .ant-collapse-item > .ant-collapse-header {
