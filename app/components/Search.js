@@ -18,25 +18,26 @@ export const SearchResource = () => {
   const highlight = () => {
     if (search != '') {
       let sel = document.querySelectorAll('.name, .qual, .info, .det, .orgname');
-      let s = search.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
+      let s = search.replace(/[`~!@#$%^&*()_|\-=?;:'".<>\{\}\[\]\\\/]/gi, '');
       s = s.trim();
-      let words = s.split(/(?:,| )+/);
+      let words = s.split(/\s*,| |[+]\s*/);
+      words = words.filter(Boolean);
       words.map(w => {
-        if (w != '') {
-          let regex = RegExp(`(${w})(?!([^<]+)?>)`, 'gi');
-          for (let i = 0; i < sel.length; i++) {
-            let inner = sel[i].innerHTML.replace(regex, function (replacement) {return '<span class="marker">'+replacement+'</span>'});
-            sel[i].innerHTML = inner;
-          }
+        let regex = RegExp(`(${w})(?!([^<]+)?>)`, 'gi');
+        for (let i = 0; i < sel.length; i++) {
+          let inner = sel[i].innerHTML.replace(regex, function (replacement) {return '<span class="marker">'+replacement+'</span>'});
+          sel[i].innerHTML = inner;
         }
       });
     }
   };
 
   const clearMarker = () => {
-    let sel = document.querySelectorAll('.name, .qual, .info, .det, .orgname');
-    for (let i = 0; i < sel.length; i++) {
-      sel[i].innerHTML = sel[i].textContent;
+    if (search != '') {
+      let sel = document.querySelectorAll('.name, .qual, .info, .det, .orgname');
+      for (let i = 0; i < sel.length; i++) {
+        sel[i].innerHTML = sel[i].textContent;
+      }
     }
   };
 
@@ -73,6 +74,10 @@ export const SearchResource = () => {
 
   //console.log(result);
   //console.log(result2);
+  const NoName = 'name unknown';
+  const NoAddress = 'address unknown';
+  const NoContact = 'no contacts available';
+  const NoType = 'type unknown';
 
   return (
     <div className="content">
@@ -81,14 +86,15 @@ export const SearchResource = () => {
           <Search placeholder="Search..." style={{marginBottom: '6px'}} enterButton="Search" size="large" onSearch={value => getDataPr(value)} />
           <Accordion>
             <List size="large" pagination={{pageSize: 10, onChange: ((page, size) => setPage(page))}} dataSource={result} renderItem={ (item, i) => (
-              <List.Item className="me">
+              <List.Item>
                 <Card style={{width: "100%", background: '#fff', border: 0}}>
                   <Accordion.Toggle as={Card.Header} eventKey={i} style={{padding: "0px 3px", background: '#fff', border: 0}}>
                     <List.Item.Meta
                       title={
                         <div className="row">
                           <div className="name">
-                            {item.resource.name && item.resource.name[0].given.join(' ') + ' ' + item.resource.name[0].family}
+                            {item.resource.name ? (item.resource.name[0].given && item.resource.name[0].given.join(' ')) +
+                             (item.resource.name[0].family && ' ' + item.resource.name[0].family) : NoName}
                           </div>
                           <div className="qual">{item.resource.qualification && item.resource.qualification[0].code.text}</div>
                         </div>
@@ -96,7 +102,9 @@ export const SearchResource = () => {
                       description={
                         <div className="row" id="desc">
                           <div className="info">
-                            {item.resource.address && item.resource.address[0].line + ', ' + item.resource.address[0].city + ', ' + item.resource.address[0].state}
+                            {item.resource.address ? ((item.resource.address[0].line && item.resource.address[0].line ) +
+                                                      (item.resource.address[0].city && ', ' + item.resource.address[0].city )) : NoAddress}
+                            {item.resource.address[0].state && ', ' + item.resource.address[0].state}
                             {item.resource.telecom && ' Tel. ' + item.resource.telecom[0].value}
                           </div>
                           <div className="info">
@@ -112,7 +120,7 @@ export const SearchResource = () => {
                           {item.resource.name && item.resource.name.map(name => (
                             <div>
                               {name.prefix && name.prefix.join('/') + ' '}
-                              <span className="det">{name.given.join(' ') + ' ' + name.family}</span>
+                              <span className="det">{name.given && name.given.join(' ')}{name.family && ' ' + name.family}</span>
                               {name.suffix && ' ' + name.suffix.join('/')}
                             </div>))}
                         </Descriptions.Item>
@@ -130,11 +138,14 @@ export const SearchResource = () => {
                             <><span className="det">{id.value}</span>{item.resource.identifier.length > 1 && i != item.resource.identifier.length - 1 && ' / '}</>))}
                         </Descriptions.Item>
                         <Descriptions.Item label="Address">
-                          {item.resource.address && item.resource.address.map(adr => (
+                          {item.resource.address ? item.resource.address.map(adr => (
                             <div className="det">
-                              {adr.line.join('/') + ', ' + adr.city + ', ' + adr.state + ' ' + adr.postalCode}
-                            </div>))}
-                          <div >Tel. {item.resource.telecom && item.resource.telecom[0].value}</div>
+                              {adr.line && adr.line.join('/')}
+                              {adr.city && ', ' + adr.city}
+                              {adr.state && ', ' + adr.state}
+                              {adr.postalCode && ' ' + adr.postalCode}
+                            </div>)) : NoAddress}
+                          <div >{item.resource.telecom && 'Tel. ' + item.resource.telecom[0].value}</div>
                         </Descriptions.Item>
                       </Descriptions>
                     </Card.Body>
@@ -148,21 +159,24 @@ export const SearchResource = () => {
           <Search placeholder="Search..." style={{marginBottom: '6px'}} enterButton="Search" size="large" onSearch={value => getDataOrg(value)} />
           {<Accordion >
             <List size="large" pagination={{pageSize: 10, onChange: ((page, size) => setPage(page))}} dataSource={result2} renderItem={ (item, i) => (
-              <List.Item className="me">
+              <List.Item>
                 <Card style={{width: "100%", background: '#fff', border: 0}}>
                   <Accordion.Toggle as={Card.Header} eventKey={i} style={{padding: "0px 3px", background: '#fff', border: 0}}>
                     <List.Item.Meta
                       title={
                         <div className="row">
                           <div className="orgname">
-                            {item.resource.name && item.resource.name}
+                            {item.resource.name ? item.resource.name : NoName}
                           </div>
                         </div>
                       }
                       description={
                         <div className="row" id="desc">
                           <div className="info">
-                            {item.resource.address && item.resource.address[0].line + ', ' + item.resource.address[0].city + ', ' + item.resource.address[0].state + ' Tel. ' + item.resource.telecom[0].value}
+                            {item.resource.address ? ((item.resource.address[0].line && item.resource.address[0].line ) +
+                                                      (item.resource.address[0].city && ', ' + item.resource.address[0].city )) : NoAddress}
+                            {item.resource.address && ', ' + item.resource.address[0].state}
+                            {item.resource.telecom && ' Tel. ' + item.resource.telecom[0].value}
                           </div>
                           <div className="info">
                             {item.resource.identifier && item.resource.identifier[0].value}
@@ -175,23 +189,26 @@ export const SearchResource = () => {
                     <Card.Body>
                       <Descriptions layout="vertical" >
                         <Descriptions.Item label="Type" span={2}>
-                          {item.resource.type && item.resource.type.map((type, i) => (
-                            <><span className="det">{type.text}</span>{
+                          {item.resource.type ? item.resource.type.map((type, i) => (
+                            <><span className="det">{type.text && type.text}</span>{
                               item.resource.type.length > 1 && i != item.resource.type.length - 1 && ' / '
-                            }</>))}
+                            }</>)) : NoType}
                         </Descriptions.Item>
                         <Descriptions.Item label="Identifier" span={2}>
                           {item.resource.identifier && item.resource.identifier.map(( id, i ) => (
                             <><span className="det">{id.value}</span>{item.resource.identifier.length > 1 && i != item.resource.identifier.length - 1 && ' / '}</>))}
                         </Descriptions.Item>
                         <Descriptions.Item label="Contacts" span={4}>
-                          {item.resource.contact && item.resource.contact.map(guy => (
+                          {item.resource.contact ? item.resource.contact.map(guy => (
                             <div className="det">
-                              {guy.name.given.join(' ') + ' ' + guy.name.family + ', ' + guy.purpose.coding.code + ', Tel. ' + guy.telecom.value}
-                            </div>))}
+                              {guy.name && (guy.name.given && guy.name.given.join(' ')) + (guy.name.family && ' ' + guy.name.family) + (guy.purpose && ', ' + guy.purpose.coding.code) + (guy.telecom && ', Tel. ' + guy.telecom.value )}
+                            </div>)) : NoContact}
                         </Descriptions.Item>
                         <Descriptions.Item label="Address">
-                          {item.resource.address && item.resource.address.map(adr => (<div className="det">{adr.line.join('/') + ', ' + adr.city + ', ' + adr.state + ' ' + adr.postalCode}</div>))}
+                          {item.resource.address ? item.resource.address.map(adr => (
+                            <div className="det">
+                              {(adr.line && adr.line.join('/')) + (adr.city && ', ' + adr.city ) + (adr.state && ', ' + adr.state ) + (adr.postalCode && ' ' + adr.postalCode )}
+                            </div>)) : NoAddress}
                         </Descriptions.Item>
                       </Descriptions>
                     </Card.Body>
