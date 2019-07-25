@@ -21,12 +21,9 @@ export const SearchResource = () => {
       let s = search.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
       s = s.trim();
       let words = s.split(/(?:,| )+/);
-      console.log(words);
       words.map(w => {
         if (w != '') {
-          //let regex = RegExp('((?!.*^werne$.*).)*', 'gi');
-          let regex = RegExp(w, 'gi')
-          console.log(regex);
+          let regex = RegExp(`(${w})(?!([^<]+)?>)`, 'gi');
           for (let i = 0; i < sel.length; i++) {
             let inner = sel[i].innerHTML.replace(regex, function (replacement) {return '<span class="marker">'+replacement+'</span>'});
             sel[i].innerHTML = inner;
@@ -36,7 +33,15 @@ export const SearchResource = () => {
     }
   };
 
+  const clearMarker = () => {
+    let sel = document.querySelectorAll('.name, .qual, .info, .det, .orgname');
+    for (let i = 0; i < sel.length; i++) {
+      sel[i].innerHTML = sel[i].textContent;
+    }
+  };
+
   useEffect(() => {
+    clearMarker();
     highlight();
   });
 
@@ -67,7 +72,7 @@ export const SearchResource = () => {
   };
 
   //console.log(result);
-  console.log(result2);
+  //console.log(result2);
 
   return (
     <div className="content">
