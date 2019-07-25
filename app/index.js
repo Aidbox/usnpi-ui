@@ -3,7 +3,7 @@ import { Router } from 'react-router-dom'
 import history from './history'
 
 import './index.css';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
 import App from './App'
 
