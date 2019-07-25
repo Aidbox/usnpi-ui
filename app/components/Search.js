@@ -22,6 +22,7 @@ export const SearchResource = () => {
       s = s.trim();
       let words = s.split(/\s*,| |[+]\s*/);
       words = words.filter(Boolean);
+      console.log(sel);
       words.map(w => {
         let regex = RegExp(`(${w})(?!([^<]+)?>)`, 'gi');
         for (let i = 0; i < sel.length; i++) {
@@ -33,18 +34,17 @@ export const SearchResource = () => {
   };
 
   const clearMarker = () => {
-    if (search != '') {
-      let sel = document.querySelectorAll('.name, .qual, .info, .det, .orgname');
-      for (let i = 0; i < sel.length; i++) {
-        sel[i].innerHTML = sel[i].textContent;
-      }
+    let sel = document.querySelectorAll('.name, .qual, .info, .det, .orgname');
+    console.log(sel);
+    for (let i = 0; i < sel.length; i++) {
+      sel[i].innerHTML = sel[i].textContent;
     }
   };
 
   useEffect(() => {
     clearMarker();
     highlight();
-  });
+  }, [result, result2]);
 
   const getDataPr = input => {
     setSearch(input);
@@ -76,8 +76,11 @@ export const SearchResource = () => {
   //console.log(result2);
   const NoName = 'name unknown';
   const NoAddress = 'address unknown';
-  const NoContact = 'no contacts available';
+  const NoContact = 'no contacts specified';
   const NoType = 'type unknown';
+  const NoId = 'no identifiers';
+  const NoQual = 'qualification unknown';
+  const NoGender = 'not stated';
 
   return (
     <div className="content">
@@ -92,24 +95,27 @@ export const SearchResource = () => {
                     <List.Item.Meta
                       title={
                         <div className="row">
-                          <div className="name">
-                            {item.resource.name ? (item.resource.name[0].given && item.resource.name[0].given.join(' ')) +
-                             (item.resource.name[0].family && ' ' + item.resource.name[0].family) : NoName}
-                          </div>
+                          {item.resource.name ?
+                           <div className="name">
+                             {(item.resource.name[0].given && item.resource.name[0].given.join(' ')) +
+                              (item.resource.name[0].family && ' ' + item.resource.name[0].family)}
+                           </div> : NoName}
                           <div className="qual">{item.resource.qualification && item.resource.qualification[0].code.text}</div>
                         </div>
                       }
                       description={
                         <div className="row" id="desc">
-                          <div className="info">
-                            {item.resource.address ? ((item.resource.address[0].line && item.resource.address[0].line ) +
-                                                      (item.resource.address[0].city && ', ' + item.resource.address[0].city )) : NoAddress}
-                            {item.resource.address[0].state && ', ' + item.resource.address[0].state}
-                            {item.resource.telecom && ' Tel. ' + item.resource.telecom[0].value}
-                          </div>
-                          <div className="info">
-                            {item.resource.identifier && item.resource.identifier[0].value}
-                          </div>
+                          {item.resource.address ?
+                           <div className="info">
+                             {(item.resource.address[0].line && item.resource.address[0].line ) +
+                              (item.resource.address[0].city && ', ' + item.resource.address[0].city )}
+                             {item.resource.address[0].state && ', ' + item.resource.address[0].state}
+                             {item.resource.telecom && item.resource.telecom[0].value && ' Tel. ' + item.resource.telecom[0].value}
+                           </div> : NoAddress }
+                          {item.resource.identifier ?
+                           <div className="info">
+                             {item.resource.identifier[0].value && item.resource.identifier[0].value}
+                           </div> : NoId}
                         </div>
                       } />
                   </Accordion.Toggle>
@@ -125,17 +131,19 @@ export const SearchResource = () => {
                             </div>))}
                         </Descriptions.Item>
                         <Descriptions.Item label="Gender">
-                          {item.resource.gender && item.resource.gender}
+                          {item.resource.gender ? item.resource.gender : NoGender}
                         </Descriptions.Item>
                         <Descriptions.Item label="Qualification" span={2}>
                           {item.resource.qualification && item.resource.qualification.map((qual, i) => (
-                            <><span className="det">{qual.code.text}</span>{
+                            <>{qual.code.text ? <span className="det">{qual.code.text}</span> : NoQual}{
                               item.resource.qualification.length > 1 && i != item.resource.qualification.length - 1 && ' / '
                             }</>))}
                         </Descriptions.Item>
                         <Descriptions.Item label="Identifier" span={2}>
                           {item.resource.identifier && item.resource.identifier.map(( id, i ) => (
-                            <><span className="det">{id.value}</span>{item.resource.identifier.length > 1 && i != item.resource.identifier.length - 1 && ' / '}</>))}
+                            <>{id.value ? <span className="det">{id.value}</span> : NoId}
+                              {item.resource.identifier.length > 1 && i != item.resource.identifier.length - 1 && ' / '
+                              }</>))}
                         </Descriptions.Item>
                         <Descriptions.Item label="Address">
                           {item.resource.address ? item.resource.address.map(adr => (
@@ -165,27 +173,33 @@ export const SearchResource = () => {
                     <List.Item.Meta
                       title={
                         <div className="row">
-                          <div className="orgname">
-                            {item.resource.name ? item.resource.name : NoName}
-                          </div>
+                          {item.resource.name ?
+                           <div className="orgname">
+                             { item.resource.name }
+                           </div> : NoName
+                          }
                         </div>
                       }
                       description={
                         <div className="row" id="desc">
-                          <div className="info">
-                            {item.resource.address ? ((item.resource.address[0].line && item.resource.address[0].line ) +
-                                                      (item.resource.address[0].city && ', ' + item.resource.address[0].city )) : NoAddress}
-                            {item.resource.address && ', ' + item.resource.address[0].state}
-                            {item.resource.telecom && ' Tel. ' + item.resource.telecom[0].value}
-                          </div>
-                          <div className="info">
-                            {item.resource.identifier && item.resource.identifier[0].value}
-                          </div>
+                          {item.resource.address ?
+                            <div className="info">
+                              {( item.resource.address[0].line && item.resource.address[0].line )  +
+                               ( item.resource.address[0].city && ', ' + item.resource.address[0].city ) +
+                               ( item.resource.address[0].state && ', ' + item.resource.address[0].state )}
+                              {item.resource.telecom && (' Tel. ' + item.resource.telecom[0].value)}
+                            </div> : NoAddress
+                          }
+                          {item.resource.identifier && item.resource.identifier[0].value ?
+                           <div className="info">
+                             {item.resource.identifier[0].value}
+                           </div> : NoId
+                          }
                         </div>
                       } />
                   </Accordion.Toggle>
 
-                  <Accordion.Collapse eventKey={i}>
+                  {<Accordion.Collapse eventKey={i}>
                     <Card.Body>
                       <Descriptions layout="vertical" >
                         <Descriptions.Item label="Type" span={2}>
@@ -195,14 +209,15 @@ export const SearchResource = () => {
                             }</>)) : NoType}
                         </Descriptions.Item>
                         <Descriptions.Item label="Identifier" span={2}>
-                          {item.resource.identifier && item.resource.identifier.map(( id, i ) => (
-                            <><span className="det">{id.value}</span>{item.resource.identifier.length > 1 && i != item.resource.identifier.length - 1 && ' / '}</>))}
+                          {item.resource.identifier ? item.resource.identifier.map(( id, i ) => (
+                            <><span className="det">{id.value}</span>
+                              {item.resource.identifier.length > 1 && i != item.resource.identifier.length - 1 && ' / '}</>)) : NoId}
                         </Descriptions.Item>
                         <Descriptions.Item label="Contacts" span={4}>
-                          {item.resource.contact ? item.resource.contact.map(guy => (
+                          {item.resource.contact ? item.resource.contact.map(guy => ( guy.name &&
                             <div className="det">
-                              {guy.name && (guy.name.given && guy.name.given.join(' ')) + (guy.name.family && ' ' + guy.name.family) + (guy.purpose && ', ' + guy.purpose.coding.code) + (guy.telecom && ', Tel. ' + guy.telecom.value )}
-                            </div>)) : NoContact}
+                              {(guy.name.given && guy.name.given.join(' ')) + (guy.name.family && ' ' + guy.name.family) + (guy.purpose && ', ' + guy.purpose.coding.code) + (guy.telecom && ', Tel. ' + guy.telecom.value )}
+                            </div> )) : NoContact}
                         </Descriptions.Item>
                         <Descriptions.Item label="Address">
                           {item.resource.address ? item.resource.address.map(adr => (
@@ -212,7 +227,7 @@ export const SearchResource = () => {
                         </Descriptions.Item>
                       </Descriptions>
                     </Card.Body>
-                  </Accordion.Collapse>
+                  </Accordion.Collapse>}
                 </Card>
               </List.Item>
             )}/>
