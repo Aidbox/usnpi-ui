@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Input, List, Tabs, Descriptions, Table, Collapse } from 'antd';
 import { site_url } from '../config';
-import useStoreon from 'storeon/react';
 import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
 
@@ -22,7 +21,6 @@ export const SearchResource = () => {
       s = s.trim();
       let words = s.split(/\s*,| |[+]\s*/);
       words = words.filter(Boolean);
-      console.log(sel);
       words.map(w => {
         let regex = RegExp(`(${w})(?!([^<]+)?>)`, 'gi');
         for (let i = 0; i < sel.length; i++) {
@@ -35,7 +33,6 @@ export const SearchResource = () => {
 
   const clearMarker = () => {
     let sel = document.querySelectorAll('.name, .qual, .info, .det, .orgname');
-    console.log(sel);
     for (let i = 0; i < sel.length; i++) {
       sel[i].innerHTML = sel[i].textContent;
     }

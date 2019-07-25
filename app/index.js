@@ -1,6 +1,5 @@
 import React from 'react'
 import { Router } from 'react-router-dom'
-import StoreContext from 'storeon/react/context'
 import history from './history'
 
 import './index.css';
