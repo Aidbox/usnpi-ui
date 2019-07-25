@@ -15,7 +15,7 @@
   "keywords": [],
   "author": "Mikhail Pravilenko <zorkijofficial@gmail.com>",
   "license": "MIT",
-  "homepage": "https://thezorkij.github.io/search-resource-app",
+  "homepage": "https://thezorkij.github.io/search-resource",
   "dependencies": {
     "aidbox": "^2.0.0-beta.0",
     "antd": "^3.20.1",
