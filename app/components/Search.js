@@ -83,6 +83,19 @@ export const SearchResource = () => {
     <div className="content">
       <Tabs defaultActiveKey='1' >
         <TabPane tab="Practitioner" key="1">
+          <Accordion >
+            <Card >
+              <Card.Header >
+              <Accordion.Toggle as={Card.Header} eventKey={22}>
+                <div ></div>
+              </Accordion.Toggle>
+              </Card.Header>
+              <Accordion.Collapse eventKey={22}>
+                <Card.Body >Melm</Card.Body>
+              </Accordion.Collapse>
+            </Card>
+
+          </Accordion>
           <Search placeholder="Search..." style={{marginBottom: '6px'}} enterButton="Search" size="large" onSearch={value => getDataPr(value)} />
           <Accordion>
             <List size="large" pagination={{pageSize: 10, onChange: ((page, size) => setPage(page))}} dataSource={result} renderItem={ (item, i) => (
