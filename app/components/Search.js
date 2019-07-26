@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Input, List, Tabs, Descriptions, Table, Collapse } from 'antd';
 import { site_url } from '../config';
-import { Accordion } from 'react-bootstrap';
+import Accordion from 'react-bootstrap/Accordion';
 import { Card } from 'react-bootstrap';
 
 const { Search } = Input;
