@@ -2,8 +2,8 @@ import React from 'react'
 import { Router } from 'react-router-dom'
 import history from './history'
 
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
-import 'bootstrap/dist/css/bootstrap.css';
 
 import App from './App'
 
