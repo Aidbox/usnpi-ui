@@ -3,6 +3,7 @@ import { Input, List, Tabs, Descriptions, Table, Collapse } from 'antd';
 import { site_url } from '../config';
 import { Accordion } from 'react-bootstrap';
 import { Card } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
 
 const { Search } = Input;
 const { TabPane } = Tabs;
@@ -83,6 +84,17 @@ export const SearchResource = () => {
     <div className="content">
       <Tabs defaultActiveKey='1' >
         <TabPane tab="Practitioner" key="1">
+          <Dropdown>
+            <Dropdown.Toggle variant="success" id="dropdown-basic">
+              Dropdown Button
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+              <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+              <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
           <Accordion >
             <Card >
               <Card.Header >
