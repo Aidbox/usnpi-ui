@@ -4,6 +4,7 @@ import { site_url } from '../config';
 import { Accordion } from 'react-bootstrap';
 import { Card } from 'react-bootstrap';
 import { Dropdown } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 const { Search } = Input;
 const { TabPane } = Tabs;
@@ -98,11 +99,11 @@ export const SearchResource = () => {
           <Accordion >
             <Card >
               <Card.Header >
-              <Accordion.Toggle as={Card.Header} eventKey={22}>
-                <div ></div>
-              </Accordion.Toggle>
+                <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                  sosi o4ko
+                </Accordion.Toggle>
               </Card.Header>
-              <Accordion.Collapse eventKey={22}>
+              <Accordion.Collapse eventKey="0">
                 <Card.Body >Melm</Card.Body>
               </Accordion.Collapse>
             </Card>
