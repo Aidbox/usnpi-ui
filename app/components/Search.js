@@ -83,7 +83,6 @@ export const SearchResource = () => {
     <div className="content">
       <Tabs defaultActiveKey='1' >
         <TabPane tab="Practitioner" key="1">
-          <button type="button" className="btn btn-outline-primary">Primary</button>
           <Search placeholder="Search..." style={{marginBottom: '6px'}} enterButton="Search" size="large" onSearch={value => getDataPr(value)} />
           <Accordion>
             <List size="large" pagination={{pageSize: 10, onChange: ((page, size) => setPage(page))}} dataSource={result} renderItem={ (item, i) => (
