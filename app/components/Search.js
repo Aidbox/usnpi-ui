@@ -15,12 +15,16 @@ export const SearchResource = () => {
   const [page, setPage] = useState(0);
 
   const highlight = () => {
+    let sel = document.querySelectorAll('.name, .qual, .info, .det, .orgname');
+    for (let i = 0; i < sel.length; i++) {
+      sel[i].innerHTML = sel[i].textContent;
+    }
     if (search != '') {
-      let sel = document.querySelectorAll('.name, .qual, .info, .det, .orgname');
       let s = search.replace(/[`~!@#$%^&*()_|\-=?;:'".<>\{\}\[\]\\\/]/gi, '');
       s = s.trim();
       let words = s.split(/\s*,| |[+]\s*/);
       words = words.filter(Boolean);
+      console.log(sel);
       words.map(w => {
         let regex = RegExp(`(${w})(?!([^<]+)?>)`, 'gi');
         for (let i = 0; i < sel.length; i++) {
@@ -31,17 +35,9 @@ export const SearchResource = () => {
     }
   };
 
-  const clearMarker = () => {
-    let sel = document.querySelectorAll('.name, .qual, .info, .det, .orgname');
-    for (let i = 0; i < sel.length; i++) {
-      sel[i].innerHTML = sel[i].textContent;
-    }
-  };
-
   useEffect(() => {
-    clearMarker();
     highlight();
-  }, [result, result2]);
+  });
 
   const getDataPr = input => {
     setSearch(input);
@@ -103,11 +99,11 @@ export const SearchResource = () => {
                       description={
                         <div className="row" id="desc">
                           {item.resource.address ?
-                           <div className="info">
+                           <div className="info" >
                              {(item.resource.address[0].line && item.resource.address[0].line ) +
-                              (item.resource.address[0].city && ', ' + item.resource.address[0].city )}
-                             {item.resource.address[0].state && ', ' + item.resource.address[0].state}
-                             {item.resource.telecom && item.resource.telecom[0].value && ' Tel. ' + item.resource.telecom[0].value}
+                              (item.resource.address[0].city && ', ' + item.resource.address[0].city ) +
+                              (item.resource.address[0].state && ', ' + item.resource.address[0].state) +
+                              (item.resource.telecom && item.resource.telecom[0].value && ' Tel. ' + item.resource.telecom[0].value)}
                            </div> : NoAddress }
                           {item.resource.identifier ?
                            <div className="info">
@@ -123,7 +119,7 @@ export const SearchResource = () => {
                           {item.resource.name && item.resource.name.map(name => (
                             <div>
                               {name.prefix && name.prefix.join('/') + ' '}
-                              <span className="det">{name.given && name.given.join(' ')}{name.family && ' ' + name.family}</span>
+                              <span className="det">{(name.given && name.given.join(' ')) + (name.family && ' ' + name.family)}</span>
                               {name.suffix && ' ' + name.suffix.join('/')}
                             </div>))}
                         </Descriptions.Item>
@@ -145,10 +141,10 @@ export const SearchResource = () => {
                         <Descriptions.Item label="Address">
                           {item.resource.address ? item.resource.address.map(adr => (
                             <div className="det">
-                              {adr.line && adr.line.join('/')}
-                              {adr.city && ', ' + adr.city}
-                              {adr.state && ', ' + adr.state}
-                              {adr.postalCode && ' ' + adr.postalCode}
+                              {( adr.line && adr.line.join('/') ) +
+                               (adr.city && ', ' + adr.city) +
+                               (adr.state && ', ' + adr.state) +
+                               (adr.postalCode && ' ' + adr.postalCode)}
                             </div>)) : NoAddress}
                           <div >{item.resource.telecom && 'Tel. ' + item.resource.telecom[0].value}</div>
                         </Descriptions.Item>
@@ -183,8 +179,8 @@ export const SearchResource = () => {
                             <div className="info">
                               {( item.resource.address[0].line && item.resource.address[0].line )  +
                                ( item.resource.address[0].city && ', ' + item.resource.address[0].city ) +
-                               ( item.resource.address[0].state && ', ' + item.resource.address[0].state )}
-                              {item.resource.telecom && (' Tel. ' + item.resource.telecom[0].value)}
+                               ( item.resource.address[0].state && ', ' + item.resource.address[0].state ) +
+                               ( item.resource.telecom && (' Tel. ' + item.resource.telecom[0].value)) }
                             </div> : NoAddress
                           }
                           {item.resource.identifier && item.resource.identifier[0].value ?
