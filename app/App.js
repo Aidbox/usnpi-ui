@@ -17,7 +17,7 @@ const App = () => (
           background: '#fff',
           marginLeft: '20%',
           marginRight: '20%',
-          paddingTop: '1rem',
+          paddingTop: '6px',
         }}
       >
         <Switch>

@@ -7,10 +7,33 @@
   background-color: #bff;
 }
 
+.clickable {
+  cursor: pointer;
+}
+
 .content {
   padding-left: 1rem;
   padding-right: 1rem;
   padding-bottom: 2rem;
+}
+
+.searchbar {
+}
+
+.ant-input-search-button {
+  z-index: 2;
+}
+
+.timer {
+  float: right;
+  margin-top: -5px;
+  padding-top: 8px;
+  width: 100%;
+  z-index: 1;
+  font-size: 12px;
+  color: #ccc;
+  text-align: center;
+  line-height: 18px;
 }
 
 .row {

@@ -13,6 +13,8 @@ export const SearchResource = () => {
   const [result2, setResult2] = useState([]);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
+  const [timePr, setTimePr] = useState(null);
+  const [timeOrg, setTimeOrg] = useState(null);
 
   const highlight = () => {
     let sel = document.querySelectorAll('.name, .qual, .info, .det, .orgname');
@@ -24,7 +26,6 @@ export const SearchResource = () => {
       s = s.trim();
       let words = s.split(/\s*,| |[+]\s*/);
       words = words.filter(Boolean);
-      console.log(sel);
       words.map(w => {
         let regex = RegExp(`(${w})(?!([^<]+)?>)`, 'gi');
         for (let i = 0; i < sel.length; i++) {
@@ -42,12 +43,15 @@ export const SearchResource = () => {
   const getDataPr = input => {
     setSearch(input);
     let query = `${site_url}/Practitioner`;
+    let start = new Date();
     if (input != '')
       query = query +
       `/$lookup?name=lk&by=name.family,name.given,identifier.value;address.city,address.state,qualification.code.text;address.line&q=${input}&sort=name.family,name.given`;
     fetch(query)
       .then(r => r.json())
       .then(d => {
+        console.log(d);
+        setTimePr(new Date() - start);
         setResult(d.entry);
       });
   };
@@ -55,12 +59,14 @@ export const SearchResource = () => {
   const getDataOrg = input => {
     setSearch(input);
     let query = `${site_url}/Organization`;
+    let start = new Date();
     if (input != '')
       query = query +
       `/$lookup?name=lk&by=name,contact.name.family,contact.name.given,identifier.value;address.city,address.state,type.text;address.line&q=${input}&sort=name`;
     fetch(query)
       .then(r => r.json())
       .then(d => {
+        setTimeOrg(new Date() - start);
         setResult2(d.entry);
       });
   };
@@ -79,12 +85,13 @@ export const SearchResource = () => {
     <div className="content">
       <Tabs defaultActiveKey='1' >
         <TabPane tab="Practitioner" key="1">
-          <Search placeholder="Search..." style={{marginBottom: '6px'}} enterButton="Search" size="large" onSearch={value => getDataPr(value)} />
-          <Accordion>
+          <Search placeholder="Search..." className="searchbar" enterButton="Search" size="large" onSearch={value => getDataPr(value)} />
+          <div className="timer">{timePr && 'Request took ' + timePr + ' ms'}</div>
+          <Accordion style={{marginTop: "20px"}}>
             <List size="large" pagination={{pageSize: 10, onChange: ((page, size) => setPage(page))}} dataSource={result} renderItem={ (item, i) => (
-              <List.Item>
+              <List.Item className="clickable">
                 <Card style={{width: "100%", background: '#fff', border: 0}}>
-                  <Accordion.Toggle as={Card.Header} eventKey={i} style={{padding: "0px 3px", background: '#fff', border: 0}}>
+                  <Accordion.Toggle as={Card.Header} eventKey={i} style={{padding: "0px 10px 0px 4px", background: '#fff', border: 0}}>
                     <List.Item.Meta
                       title={
                         <div className="row">
@@ -116,12 +123,12 @@ export const SearchResource = () => {
                     <Card.Body>
                       <Descriptions layout="vertical" >
                         <Descriptions.Item label="Full name" span={2}>
-                          {item.resource.name && item.resource.name.map(name => (
+                          {item.resource.name ? item.resource.name.map(name => (
                             <div>
                               {name.prefix && name.prefix.join('/') + ' '}
                               <span className="det">{(name.given && name.given.join(' ')) + (name.family && ' ' + name.family)}</span>
                               {name.suffix && ' ' + name.suffix.join('/')}
-                            </div>))}
+                            </div>)) : NoName}
                         </Descriptions.Item>
                         <Descriptions.Item label="Gender">
                           {item.resource.gender ? item.resource.gender : NoGender}
@@ -157,10 +164,11 @@ export const SearchResource = () => {
           </Accordion>
         </TabPane>
         <TabPane tab="Organization" key="2">
-          <Search placeholder="Search..." style={{marginBottom: '6px'}} enterButton="Search" size="large" onSearch={value => getDataOrg(value)} />
+          <Search placeholder="Search..." enterButton="Search" size="large" onSearch={value => getDataOrg(value)} />
+          <div className="timer">{timeOrg && 'Request took ' + timeOrg + ' ms'}</div>
           {<Accordion >
             <List size="large" pagination={{pageSize: 10, onChange: ((page, size) => setPage(page))}} dataSource={result2} renderItem={ (item, i) => (
-              <List.Item>
+              <List.Item className="clickable">
                 <Card style={{width: "100%", background: '#fff', border: 0}}>
                   <Accordion.Toggle as={Card.Header} eventKey={i} style={{padding: "0px 3px", background: '#fff', border: 0}}>
                     <List.Item.Meta
