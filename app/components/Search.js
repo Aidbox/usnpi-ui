@@ -50,7 +50,6 @@ export const SearchResource = () => {
     fetch(query)
       .then(r => r.json())
       .then(d => {
-        console.log(d);
         setTimePr(new Date() - start);
         setResult(d.entry);
       });
