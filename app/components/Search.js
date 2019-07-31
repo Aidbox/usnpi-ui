@@ -38,7 +38,7 @@ export const SearchResource = () => {
 
   useEffect(() => {
     highlight();
-  });
+  }, [result, result2, page]);
 
   const getDataPr = input => {
     setSearch(input);
