@@ -88,9 +88,9 @@ export const SearchResource = () => {
           <div className="timer">{timePr && 'Request took ' + timePr + ' ms'}</div>
           <Accordion style={{marginTop: "20px"}}>
             <List size="large" pagination={{pageSize: 10, onChange: ((page, size) => setPage(page))}} dataSource={result} renderItem={ (item, i) => (
-              <List.Item className="clickable">
+              <List.Item >
                 <Card style={{width: "100%", background: '#fff', border: 0}}>
-                  <Accordion.Toggle as={Card.Header} eventKey={i} style={{padding: "0px 10px 0px 4px", background: '#fff', border: 0}}>
+                  <Accordion.Toggle className="clickable" as={Card.Header} eventKey={i} style={{padding: "0px 10px 0px 4px", background: '#fff', border: 0}}>
                     <List.Item.Meta
                       title={
                         <div className="row">
