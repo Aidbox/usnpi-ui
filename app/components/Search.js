@@ -87,7 +87,7 @@ export const SearchResource = () => {
           <Search placeholder="Search..." className="searchbar" enterButton="Search" size="large" onSearch={value => getDataPr(value)} />
           <div className="timer">{timePr && 'Request took ' + timePr + ' ms'}</div>
           <Accordion style={{marginTop: "20px"}}>
-            <List size="large" pagination={{pageSize: 10, onChange: ((page, size) => setPage(page))}} dataSource={result} renderItem={ (item, i) => (
+            <List size="large" pagination={{pageSize: 30, onChange: ((page, size) => setPage(page))}} dataSource={result} renderItem={ (item, i) => (
               <List.Item >
                 <Card style={{width: "100%", background: '#fff', border: 0}}>
                   <Accordion.Toggle className="clickable" as={Card.Header} eventKey={i} style={{padding: "0px 10px 0px 4px", background: '#fff', border: 0}}>
@@ -166,7 +166,7 @@ export const SearchResource = () => {
           <Search placeholder="Search..." enterButton="Search" size="large" onSearch={value => getDataOrg(value)} />
           <div className="timer">{timeOrg && 'Request took ' + timeOrg + ' ms'}</div>
           {<Accordion >
-            <List size="large" pagination={{pageSize: 10, onChange: ((page, size) => setPage(page))}} dataSource={result2} renderItem={ (item, i) => (
+            <List size="large" pagination={{pageSize: 30, onChange: ((page, size) => setPage(page))}} dataSource={result2} renderItem={ (item, i) => (
               <List.Item>
                 <Card style={{width: "100%", background: '#fff', border: 0}}>
                   <Accordion.Toggle className="clickable" as={Card.Header} eventKey={i} style={{padding: "0px 3px", background: '#fff', border: 0}}>
