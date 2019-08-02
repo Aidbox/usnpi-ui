@@ -18,6 +18,8 @@
 }
 
 .searchbar {
+  padding-left: 4px;
+  padding-right: 4px;
 }
 
 .ant-input-search-button {

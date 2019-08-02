@@ -1,7 +1,7 @@
 {
   "name": "search-resource",
   "version": "1.0.0",
-  "description": "QA app",
+  "description": "Practitioner and Organization FHIR resources search",
   "main": "index.js",
   "scripts": {
     "ui": "export $(cat .env) && parcel index.html",
@@ -15,7 +15,6 @@
   "keywords": [],
   "author": "Mikhail Pravilenko <zorkijofficial@gmail.com>",
   "license": "MIT",
-  "homepage": "https://thezorkij.github.io/search-resource",
   "dependencies": {
     "aidbox": "^2.0.0-beta.0",
     "antd": "^3.20.1",
