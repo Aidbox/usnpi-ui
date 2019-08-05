@@ -53,9 +53,9 @@ async function start() {
   let ctx = null;
   try {
     ctx = await aidbox(init_context);
-    console.log('aidbox app was registered');
+    console.log('Aidbox app was registered');
     await prepareClientPolicy(ctx);
-    console.log('App was started');
+    console.log('Dev prepared');
   } catch (err) {
     console.log('Error:', err);
     setTimeout(() => {

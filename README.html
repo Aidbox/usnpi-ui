@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>README.html</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+
+</head>
+
+<body>
+
+<h1>Resource search app</h1>
+
+<p>This is a demonstration app showcasing indexed search capabilities of the <a href="https://www.health-samurai.io/aidbox">Aidbox</a> platform performed on the <a href="http://download.cms.gov/nppes/NPI_Files.html">US NPI</a> registry powered by Aidbox.</p>
+
+<p>The app provides search on Practitioner and Organization FHIR resources.</p>
+
+<h2>Dev</h2>
+
+<ul>
+<li>Install dependencies
+<code>bash
+npm i
+</code></li>
+<li>Prepare environment
+<code>bash
+cp env-tpl .env
+</code></li>
+<li>Start docker-compose with Aidbox Dev
+<code>bash
+docker-compose up -d
+</code></li>
+<li>Register app
+<code>bash
+npm run dev
+</code></li>
+<li>Start ui
+<code>bash
+npm start
+</code></li>
+</ul>
+
+<h2>Production</h2>
+
+<p>https://usnpi.netlify.com/</p>
+
+</body>
+</html>

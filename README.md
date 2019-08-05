@@ -1,13 +1,30 @@
 # Resource search app
 
-This app lets you search through Practitioner and Organization resources
+This is a demonstration app showcasing indexed search capabilities of the [Aidbox](https://www.health-samurai.io/aidbox) platform performed on the [US NPI](http://download.cms.gov/nppes/NPI_Files.html) registry powered by Aidbox.
+
+The app provides search on Practitioner and Organization FHIR resources.
 
 ## Dev
-- install deps `npm i`
-- prepare envs `cp env-tpl .env`
-- start docker-compose with aidbox dev `docker-compose up -d`
-- start aidbox-app `npm run app`
-- start ui `npm run ui`
+- Install dependencies
+  ```bash
+  npm i
+  ```
+- Prepare environment
+  ```bash
+  cp env-tpl .env
+  ```
+- Start docker-compose with Aidbox Dev
+  ```bash
+  docker-compose up -d
+  ```
+- Register app
+  ```bash
+  npm run dev
+  ```
+- Start ui
+  ```bash
+  npm start
+  ```
 
 ## Production
-https://search-resource.netlify.com/
+https://usnpi.netlify.com/

@@ -8,7 +8,7 @@ const { Search } = Input;
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
 
-export const SearchResource = () => {
+export default () => {
   //const [result, setResult] = useState([]);
   //const [result2, setResult2] = useState([]);
   const [search, setSearch] = useState('');
