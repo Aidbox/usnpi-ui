@@ -9,12 +9,19 @@ const { TabPane } = Tabs;
 const { Panel } = Collapse;
 
 export const SearchResource = () => {
-  const [result, setResult] = useState([]);
-  const [result2, setResult2] = useState([]);
+  //const [result, setResult] = useState([]);
+  //const [result2, setResult2] = useState([]);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
-  const [timePr, setTimePr] = useState(null);
-  const [timeOrg, setTimeOrg] = useState(null);
+  //const [timePr, setTimePr] = useState(null);
+  //const [timeOrg, setTimeOrg] = useState(null);
+  const [state, setState] = useState({
+    result: [],
+    result2: [],
+    timePr: null,
+    timeOrg: null,
+    loading: false,
+  });
 
   const highlight = () => {
     let sel = document.querySelectorAll('.name, .qual, .info, .det, .orgname');
@@ -27,7 +34,7 @@ export const SearchResource = () => {
       let words = s.split(/\s*,| |[+]\s*/);
       words = words.filter(Boolean);
       words.map(w => {
-        let regex = RegExp(`(${w})(?!([^<]+)?>)`, 'gi');
+        let regex = RegExp(`(${w})(?!([^<]+)?>)(?!([^&]+)?;)`, 'gi');
         for (let i = 0; i < sel.length; i++) {
           let inner = sel[i].innerHTML.replace(regex, function (replacement) {return '<span class="marker">'+replacement+'</span>'});
           sel[i].innerHTML = inner;
@@ -38,10 +45,11 @@ export const SearchResource = () => {
 
   useEffect(() => {
     highlight();
-  }, [result, result2, page]);
+  }, [state.result, state.result2, page]);
 
   const getDataPr = input => {
     setSearch(input);
+    setState({...state, loading: true});
     let query = `${site_url}/Practitioner`;
     let start = new Date();
     if (input != '')
@@ -50,13 +58,13 @@ export const SearchResource = () => {
     fetch(query)
       .then(r => r.json())
       .then(d => {
-        setTimePr(new Date() - start);
-        setResult(d.entry);
+        setState({...state, result: d.entry, timePr: new Date() - start, loading: false});
       });
   };
 
   const getDataOrg = input => {
     setSearch(input);
+    setState({...state, loading: true});
     let query = `${site_url}/Organization`;
     let start = new Date();
     if (input != '')
@@ -65,8 +73,7 @@ export const SearchResource = () => {
     fetch(query)
       .then(r => r.json())
       .then(d => {
-        setTimeOrg(new Date() - start);
-        setResult2(d.entry);
+        setState({...state, result2: d.entry, timeOrg: new Date() - start, loading: false});
       });
   };
 
@@ -85,9 +92,9 @@ export const SearchResource = () => {
       <Tabs defaultActiveKey='1' >
         <TabPane tab="Practitioner" key="1">
           <Search placeholder="Search..." className="searchbar" enterButton="Search" size="large" onSearch={value => getDataPr(value)} />
-          <div className="timer">{timePr && 'Request took ' + timePr + ' ms'}</div>
+          <div className="timer">{state.timePr && 'Request took ' + state.timePr + ' ms'}</div>
           <Accordion style={{marginTop: "20px"}}>
-            <List size="large" pagination={{pageSize: 30, onChange: ((page, size) => setPage(page))}} dataSource={result} renderItem={ (item, i) => (
+            <List size="large" loading={state.loading} pagination={{pageSize: 30, onChange: ((page, size) => setPage(page))}} dataSource={state.result} renderItem={ (item, i) => (
               <List.Item >
                 <Card style={{width: "100%", background: '#fff', border: 0}}>
                   <Accordion.Toggle className="clickable" as={Card.Header} eventKey={i} style={{padding: "0px 10px 0px 4px", background: '#fff', border: 0}}>
@@ -164,9 +171,9 @@ export const SearchResource = () => {
         </TabPane>
         <TabPane tab="Organization" key="2">
           <Search placeholder="Search..." enterButton="Search" size="large" onSearch={value => getDataOrg(value)} />
-          <div className="timer">{timeOrg && 'Request took ' + timeOrg + ' ms'}</div>
+          <div className="timer">{state.timeOrg && 'Request took ' + state.timeOrg + ' ms'}</div>
           {<Accordion >
-            <List size="large" pagination={{pageSize: 30, onChange: ((page, size) => setPage(page))}} dataSource={result2} renderItem={ (item, i) => (
+             <List size="large" loading={state.loading} pagination={{pageSize: 30, onChange: ((page, size) => setPage(page))}} dataSource={state.result2} renderItem={ (item, i) => (
               <List.Item>
                 <Card style={{width: "100%", background: '#fff', border: 0}}>
                   <Accordion.Toggle className="clickable" as={Card.Header} eventKey={i} style={{padding: "0px 3px", background: '#fff', border: 0}}>
@@ -198,7 +205,6 @@ export const SearchResource = () => {
                         </div>
                       } />
                   </Accordion.Toggle>
-
                   {<Accordion.Collapse eventKey={i}>
                     <Card.Body>
                       <Descriptions layout="vertical" >
