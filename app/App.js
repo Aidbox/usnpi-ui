@@ -11,20 +11,53 @@ const App = () => (
   <div style={{
     background: '#eee',
     minHeight: '100vh',
+    paddingBottom: '4rem',
   }}>
-      <div
-        style={{
-          background: '#fff',
-          marginLeft: '20%',
-          marginRight: '20%',
-          paddingTop: '6px',
-        }}
-      >
-        <Switch>
-          <Route path="/" exact component={SearchResource} />
-          <Route component={NotFound} />
-        </Switch>
-  </div>
+    <div
+      style={{
+        background: '#fff',
+        marginLeft: '20%',
+        marginRight: '20%',
+        paddingTop: '6px',
+      }}
+    >
+      <Switch>
+        <Route path="/" exact component={SearchResource} />
+        <Route component={NotFound} />
+      </Switch>
+      <div style={{
+        width: '100%',
+        background: '#fafafa'
+      }}>
+
+        <div style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '120px',
+          paddingBottom: '10px',
+        }}>
+            <div style={{marginRight: '3rem'}}>
+              <a className="credits" href="https://www.health-samurai.io/aidbox" >
+              <div style={{
+                fontFamily: "'Gotham Pro', Arial, Sans-Serif",
+                fontWeight: "800",
+                fontSize: "18px",
+                lineHeight: "30px",
+                color: "#404040",
+              }}>Powered by </div>
+              <img src="https://uploads-ssl.webflow.com/57441aa5da71fdf07a0a2e19/5a627061e27c0000017f097c_new-logo-aidbox.svg" />
+              </a>
+            </div>
+          <a className="credits" href="https://www.health-samurai.io/">
+          <div>
+            <img style={{paddingTop: '2rem', paddingBottom: '1rem'}} src="https://uploads-ssl.webflow.com/57441aa5da71fdf07a0a2e19/5a5530dbcf0636000108521f_new-hslogo.svg" />
+          </div>
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 );
 

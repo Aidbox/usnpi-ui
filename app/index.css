@@ -74,6 +74,19 @@
   padding-bottom: 2px;
 }
 
+.credits {
+  text-decoration: none;
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+  transition: 0.1s;
+}
+
+.credits:hover {
+  text-decoration: none;
+  -webkit-filter: grayscale(0);
+  filter: grayscale(0);
+}
+
 .ant-collapse > .ant-collapse-item > .ant-collapse-header {
   width: 100%;
   padding: 0;
