@@ -1,4 +1,4 @@
-# Resource search app
+# US NPI Demo
 
 This is a demonstration app showcasing indexed search capabilities of the [Aidbox](https://www.health-samurai.io/aidbox) platform performed on the [US NPI](http://download.cms.gov/nppes/NPI_Files.html) registry powered by Aidbox.
 
