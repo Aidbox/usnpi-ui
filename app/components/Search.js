@@ -1,20 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Input, List, Tabs, Descriptions, Table, Collapse } from 'antd';
+import { Input, List, Tabs, Descriptions } from 'antd';
 import { site_url } from '../config';
 import Accordion from 'react-bootstrap/Accordion';
 import { Card } from 'react-bootstrap';
 
 const { Search } = Input;
 const { TabPane } = Tabs;
-const { Panel } = Collapse;
 
 export default () => {
-  //const [result, setResult] = useState([]);
-  //const [result2, setResult2] = useState([]);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
-  //const [timePr, setTimePr] = useState(null);
-  //const [timeOrg, setTimeOrg] = useState(null);
   const [state, setState] = useState({
     result: [],
     result2: [],
@@ -77,8 +72,6 @@ export default () => {
       });
   };
 
-  //console.log(result);
-  //console.log(result2);
   const NoName = 'name unknown';
   const NoAddress = 'address unknown';
   const NoContact = 'no contacts specified';
@@ -170,9 +163,9 @@ export default () => {
           </Accordion>
         </TabPane>
         <TabPane tab="Organization" key="2">
-          <Search placeholder="Search..." enterButton="Search" size="large" onSearch={value => getDataOrg(value)} />
+          <Search placeholder="Search..." className="searchbar" enterButton="Search" size="large" onSearch={value => getDataOrg(value)} />
           <div className="timer">{state.timeOrg && 'Request took ' + state.timeOrg + ' ms'}</div>
-          {<Accordion >
+          {<Accordion style={{marginTop: "20px"}}>
              <List size="large" loading={state.loading} pagination={{pageSize: 30, onChange: ((page, size) => setPage(page))}} dataSource={state.result2} renderItem={ (item, i) => (
               <List.Item>
                 <Card style={{width: "100%", background: '#fff', border: 0}}>

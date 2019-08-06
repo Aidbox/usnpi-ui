@@ -23,7 +23,7 @@ services:
       PGPASSWORD: postgres
   devbox-db:
     image: "aidbox/db:11.4.0-RC4"
-    container_name: db
+    container_name: db1
     ports:
       - "5432:5432"
     environment:
