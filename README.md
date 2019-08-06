@@ -1,8 +1,8 @@
 # US NPI Demo
 
-This is a demonstration app showcasing indexed search capabilities of the [Aidbox](https://www.health-samurai.io/aidbox) platform performed on the [US NPI](http://download.cms.gov/nppes/NPI_Files.html) registry powered by Aidbox.
+This is a demonstration app showcasing indexed search capability of the [US NPI](https://github.com/HealthSamurai/us-npi) registry powered by [Aidbox](https://www.health-samurai.io/aidbox).
 
-The app provides search on Practitioner and Organization FHIR resources.
+The app performs search on Practitioner and Organization FHIR resources.
 
 ## Dev
 - Install dependencies
