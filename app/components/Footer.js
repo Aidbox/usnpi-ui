@@ -39,7 +39,9 @@ export default () => (
             maxWidth: '80%',
             height: 'auto',
             paddingTop: '2rem',
-            paddingBottom: '1rem'
+            paddingBottom: '1rem',
+            position: 'relative',
+            left: '2rem'
           }} src="https://uploads-ssl.webflow.com/57441aa5da71fdf07a0a2e19/5a5530dbcf0636000108521f_new-hslogo.svg" />
         </div>
       </a>
