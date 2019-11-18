@@ -6,10 +6,6 @@
   background-color: #bff;
 }
 
-.clickable {
-  cursor: pointer;
-}
-
 .content {
   padding-left: 1rem;
   padding-right: 1rem;
@@ -96,5 +92,26 @@
 }
 
 .ant-list-lg .ant-list-item {
+  display: block;
   padding: 8px 6px;
+
+}
+
+.ant-list-items {
+  padding-top: 1rem;
+}
+
+.accordion__heading{
+  padding: 0px 10px 0px 4px;
+  width: 100%;
+}
+
+.accordion__button {
+  cursor: pointer;
+  background: '#fff';
+  border: 0;
+}
+
+.accordion__panel {
+  width: 100%;
 }

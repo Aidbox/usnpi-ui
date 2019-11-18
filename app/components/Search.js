@@ -81,19 +81,18 @@ export default () => {
 
 
   return (
+
     <div className="content">
       <Tabs defaultActiveKey='1' >
         <TabPane tab="Practitioner" key="1">
           <Search placeholder="Search..." className="searchbar" enterButton="Search" size="large" onSearch={value => getDataPr(value)} />
           <div className="timer">{state.timePr && 'Request took ' + state.timePr + ' ms'}</div>
 
-          <Accordion>
+          <Accordion allowZeroExpanded={true}>
             <List size="large" loading={state.loading} pagination={{pageSize: 30, onChange: ((page, size) => setPage(page))}} dataSource={state.result} renderItem={ (item, i) => (
-              <AccordionItem>
 
-                <List.Item >
-                  {/* <Card style={{width: "100%", background: '#fff', border: 0}}> */}
-                  {/* <Accordion.Toggle className="clickable" as={Card.Header} eventKey={i} style={{padding: "0px 10px 0px 4px", background: '#fff', border: 0}}> */}
+                <List.Item>
+                  <AccordionItem>
                   <AccordionItemHeading>
                     <AccordionItemButton>
                       <List.Item.Meta
@@ -125,9 +124,6 @@ export default () => {
                     </AccordionItemButton>
                   </AccordionItemHeading>
                   <AccordionItemPanel>
-                    {/* </Accordion.Toggle> */}
-                    {/* <Accordion.Collapse eventKey={i}> */}
-                    {/*     <Card.Body> */}
                     <Descriptions layout="vertical" >
                       <Descriptions.Item label="Full name" span={2}>
                         {item.resource.name ? item.resource.name.map(name => (
@@ -162,13 +158,11 @@ export default () => {
                           </div>)) : NoAddress}
                         <div >{item.resource.telecom && 'Tel. ' + item.resource.telecom[0].value}</div>
                       </Descriptions.Item>
-                    </Descriptions>
+              </Descriptions>
                   </AccordionItemPanel>
-                  {/*   </Card.Body> */}
-                  {/* </Accordion.Collapse> */}
-                  {/* </Card> */}
+
+                  </AccordionItem>
                 </List.Item>
-              </AccordionItem>
             )}/>
           </Accordion>
         </TabPane>
