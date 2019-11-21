@@ -17,7 +17,7 @@ export default () => {
     loading: false,
   });
 
-  const highlight = () => {
+const highlight = () => {
     let sel = document.querySelectorAll('.name, .qual, .info, .det, .orgname');
     for (let i = 0; i < sel.length; i++) {
       sel[i].innerHTML = sel[i].textContent;
@@ -79,9 +79,7 @@ export default () => {
   const NoQual = 'qualification unknown';
   const NoGender = 'not stated';
 
-
   return (
-
     <div className="content">
       <Tabs defaultActiveKey='1' >
         <TabPane tab="Practitioner" key="1">
@@ -90,9 +88,8 @@ export default () => {
 
           <Accordion allowZeroExpanded={true}>
             <List size="large" loading={state.loading} pagination={{pageSize: 30, onChange: ((page, size) => setPage(page))}} dataSource={state.result} renderItem={ (item, i) => (
-
-                <List.Item>
-                  <AccordionItem>
+              <List.Item>
+                <AccordionItem>
                   <AccordionItemHeading>
                     <AccordionItemButton>
                       <List.Item.Meta

@@ -2,6 +2,10 @@
 
 @border-radius-base: 0;
 
+body {
+  font-family: Arial;
+}
+
 .marker {
   background-color: #bff;
 }
@@ -36,7 +40,6 @@
 .row {
   display: flex;
   line-height: 18px;
-  padding-left: 6px;
 }
 
 .row#desc {
@@ -93,16 +96,28 @@
 
 .ant-list-lg .ant-list-item {
   display: block;
-  padding: 8px 6px;
-
+  padding: 10px 2px 7px 0px;
 }
 
 .ant-list-items {
-  padding-top: 1rem;
+  padding-top: 1.3rem;
+}
+
+.ant-descriptions-row > th, .ant-descriptions-row > td {
+  padding-top: 6px;
+  padding-bottom: 2px;
+  padding-left: 4px;
+}
+
+.ant-descriptions-item-label, .ant-descriptions-item-colon {
+  color: #1f1f1f;
+}
+
+.ant-descriptions-item-content {
+  padding-bottom: 10px;
 }
 
 .accordion__heading{
-  padding: 0px 10px 0px 4px;
   width: 100%;
 }
 
@@ -110,8 +125,39 @@
   cursor: pointer;
   background: '#fff';
   border: 0;
+  z-index: 0;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+    max-height: 100px;
+  }
+  to {
+    opacity: 1;
+    max-height: 300px;
+  }
+}
+
+.test {
+  animation: fade 0.4s linear alternate;
+}
+
+
+.accordion__panel[hidden] {
+  opacity: 1;
 }
 
 .accordion__panel {
   width: 100%;
+  margin-bottom: 0px;
+  padding: 10px 0px -10px 8px;
+  background-color: #fcfcfc;
+  border: solid;
+  border-width: 7px;
+  border-radius: 17px;
+  border-color: white;
+  border-bottom-style: none;
+  animation: fade 0.2s linear alternate;
 }
+
