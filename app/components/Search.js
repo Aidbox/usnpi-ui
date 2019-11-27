@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Table, Menu, Dropdown, Input, List, Tabs, Descriptions } from 'antd';
+import {Input, List, Tabs, Descriptions } from 'antd';
 import { site_url } from '../config';
 import {Accordion, AccordionItem, AccordionItemHeading, AccordionItemButton, AccordionItemPanel} from 'react-accessible-accordion';
 
@@ -14,7 +14,7 @@ export default () => {
     result2: [],
     timePr: null,
     timeOrg: null,
-    loading: false,
+    loading: false
   });
 
 const highlight = () => {
@@ -71,6 +71,11 @@ const highlight = () => {
       });
   };
 
+  const toggleAccordion = i => {
+    let els = document.getElementsByClassName("accordion_panel");
+    Array.from(els).forEach((el, y) => {i != y ? el.classList.remove("active") : el.classList.toggle("active")});
+  };
+
   const NoName = 'name unknown';
   const NoAddress = 'address unknown';
   const NoContact = 'no contacts specified';
@@ -84,14 +89,11 @@ const highlight = () => {
       <Tabs defaultActiveKey='1' >
         <TabPane tab="Practitioner" key="1">
           <Search placeholder="Search..." className="searchbar" enterButton="Search" size="large" onSearch={value => getDataPr(value)} />
-          <div className="timer">{state.timePr && 'Request took ' + state.timePr + ' ms'}</div>
-
-          <Accordion allowZeroExpanded={true}>
+          <div className="timer">{state.timePr && 'Request took ' + state.timePr + ' ms'}</div> 
+          {/* <Accordion allowZeroExpanded={true}> */}
             <List size="large" loading={state.loading} pagination={{pageSize: 30, onChange: ((page, size) => setPage(page))}} dataSource={state.result} renderItem={ (item, i) => (
               <List.Item>
-                <AccordionItem>
-                  <AccordionItemHeading>
-                    <AccordionItemButton>
+                <button className="accordion_button" onClick={()=>toggleAccordion(i)}>
                       <List.Item.Meta
                         title={
                           <div className="row">
@@ -118,10 +120,9 @@ const highlight = () => {
                              </div> : NoId}
                           </div>
                         } />
-                    </AccordionItemButton>
-                  </AccordionItemHeading>
-                  <AccordionItemPanel>
-                    <Descriptions layout="vertical" >
+              </button>
+                <div className="accordion_panel" id={i}>
+                <Descriptions layout="vertical" >
                       <Descriptions.Item label="Full name" span={2}>
                         {item.resource.name ? item.resource.name.map(name => (
                           <div>
@@ -156,12 +157,9 @@ const highlight = () => {
                         <div >{item.resource.telecom && 'Tel. ' + item.resource.telecom[0].value}</div>
                       </Descriptions.Item>
               </Descriptions>
-                  </AccordionItemPanel>
-
-                  </AccordionItem>
+              </div>
                 </List.Item>
             )}/>
-          </Accordion>
         </TabPane>
         {/* <TabPane tab="Organization" key="2"> */}
         {/*   <Search placeholder="Search..." className="searchbar" enterButton="Search" size="large" onSearch={value => getDataOrg(value)} /> */}

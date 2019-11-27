@@ -117,38 +117,19 @@ body {
   padding-bottom: 10px;
 }
 
-.accordion__heading{
+.accordion_button {
   width: 100%;
-}
-
-.accordion__button {
   cursor: pointer;
-  background: '#fff';
+  background: #fff;
   border: 0;
-  z-index: 0;
+  text-align: left;
 }
 
-@keyframes fade {
-  from {
-    opacity: 0;
-    max-height: 100px;
-  }
-  to {
-    opacity: 1;
-    max-height: 300px;
-  }
+.accordion_panel.active {
+  max-height: 400px;
 }
 
-.test {
-  animation: fade 0.4s linear alternate;
-}
-
-
-.accordion__panel[hidden] {
-  opacity: 1;
-}
-
-.accordion__panel {
+.accordion_panel {
   width: 100%;
   margin-bottom: 0px;
   padding: 10px 0px -10px 8px;
@@ -158,6 +139,10 @@ body {
   border-radius: 17px;
   border-color: white;
   border-bottom-style: none;
-  animation: fade 0.2s linear alternate;
+  overflow-y: hidden;
+  max-height: 0px;
+  -webkit-transition: max-height 0.3s ease-in-out;
+  -moz-transition: max-height 0.3 ease-in-out;
+  -o-transtition: max-height 0.3s ease-in-out;
+  transition: max-height 0.3s ease-in-out;
 }
-
