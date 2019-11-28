@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {Input, List, Tabs, Descriptions } from 'antd';
 import { site_url } from '../config';
-import {Accordion, AccordionItem, AccordionItemHeading, AccordionItemButton, AccordionItemPanel} from 'react-accessible-accordion';
 
 const { Search } = Input;
 const { TabPane } = Tabs;
@@ -71,8 +70,12 @@ const highlight = () => {
       });
   };
 
-  const toggleAccordion = i => {
-    let els = document.getElementsByClassName("accordion_panel");
+  const toggleAccordion = (i, type) => {
+    let els;
+    if (type == 0)
+      els = document.getElementsByClassName("accordion_panel practitioner");
+    else els = document.getElementsByClassName("accordion_panel organization");
+    console.log(els);
     Array.from(els).forEach((el, y) => {i != y ? el.classList.remove("active") : el.classList.toggle("active")});
   };
 
@@ -89,148 +92,141 @@ const highlight = () => {
       <Tabs defaultActiveKey='1' >
         <TabPane tab="Practitioner" key="1">
           <Search placeholder="Search..." className="searchbar" enterButton="Search" size="large" onSearch={value => getDataPr(value)} />
-          <div className="timer">{state.timePr && 'Request took ' + state.timePr + ' ms'}</div> 
-          {/* <Accordion allowZeroExpanded={true}> */}
-            <List size="large" loading={state.loading} pagination={{pageSize: 30, onChange: ((page, size) => setPage(page))}} dataSource={state.result} renderItem={ (item, i) => (
-              <List.Item>
-                <button className="accordion_button" onClick={()=>toggleAccordion(i)}>
-                      <List.Item.Meta
-                        title={
-                          <div className="row">
-                            {item.resource.name ?
-                             <div className="name">
-                               {(item.resource.name[0].given && item.resource.name[0].given.join(' ')) +
-                                (item.resource.name[0].family && ' ' + item.resource.name[0].family)}
-                             </div> : NoName}
-                            <div className="qual">{item.resource.qualification && item.resource.qualification[0].code.text}</div>
-                          </div>
-                        }
-                        description={
-                          <div className="row" id="desc">
-                            {item.resource.address ?
-                             <div className="info" >
-                               {(item.resource.address[0].line && item.resource.address[0].line ) +
-                                (item.resource.address[0].city && ', ' + item.resource.address[0].city ) +
-                                (item.resource.address[0].state && ', ' + item.resource.address[0].state) +
-                                (item.resource.telecom && item.resource.telecom[0].value && ' Tel. ' + item.resource.telecom[0].value)}
-                             </div> : NoAddress }
-                            {item.resource.identifier ?
-                             <div className="info">
-                               {item.resource.identifier[0].value && item.resource.identifier[0].value}
-                             </div> : NoId}
-                          </div>
-                        } />
+          <div className="timer">{state.timePr && 'Request took ' + state.timePr + ' ms'}</div>
+          <List size="large" loading={state.loading} pagination={{pageSize: 30, onChange: ((page, size) => setPage(page))}} dataSource={state.result}
+                renderItem={ (item, i) => (
+            <List.Item>
+              <button className="accordion_button" onClick={()=>toggleAccordion(i, 0)}>
+                <List.Item.Meta
+                  title={
+                    <div className="row">
+                      {item.resource.name ?
+                       <div className="name">
+                         {(item.resource.name[0].given && item.resource.name[0].given.join(' ')) +
+                          (item.resource.name[0].family && ' ' + item.resource.name[0].family)}
+                       </div> : NoName}
+                      <div className="qual">{item.resource.qualification && item.resource.qualification[0].code.text}</div>
+                    </div>
+                  }
+                  description={
+                    <div className="row" id="desc">
+                      {item.resource.address ?
+                       <div className="info" >
+                         {(item.resource.address[0].line && item.resource.address[0].line ) +
+                          (item.resource.address[0].city && ', ' + item.resource.address[0].city ) +
+                          (item.resource.address[0].state && ', ' + item.resource.address[0].state) +
+                          (item.resource.telecom && item.resource.telecom[0].value && ' Tel. ' + item.resource.telecom[0].value)}
+                       </div> : NoAddress }
+                      {item.resource.identifier ?
+                       <div className="info">
+                         {item.resource.identifier[0].value && item.resource.identifier[0].value}
+                       </div> : NoId}
+                    </div>
+                  } />
               </button>
-                <div className="accordion_panel" id={i}>
+              <div className="accordion_panel practitioner" id={i}>
                 <Descriptions layout="vertical" >
-                      <Descriptions.Item label="Full name" span={2}>
-                        {item.resource.name ? item.resource.name.map(name => (
-                          <div>
-                            {name.prefix && name.prefix.join('/') + ' '}
-                            <span className="det">{(name.given && name.given.join(' ')) + (name.family && ' ' + name.family)}</span>
-                            {name.suffix && ' ' + name.suffix.join('/')}
-                          </div>)) : NoName}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Gender">
-                        {item.resource.gender ? item.resource.gender : NoGender}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Qualification" span={2}>
-                        {item.resource.qualification && item.resource.qualification.map((qual, i) => (
-                          <>{qual.code.text ? <span className="det">{qual.code.text}</span> : NoQual}{
-                            item.resource.qualification.length > 1 && i != item.resource.qualification.length - 1 && ' / '
-                          }</>))}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Identifier" span={2}>
-                        {item.resource.identifier && item.resource.identifier.map(( id, i ) => (
-                          <>{id.value ? <span className="det">{id.value}</span> : NoId}
-                            {item.resource.identifier.length > 1 && i != item.resource.identifier.length - 1 && ' / '
-                            }</>))}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Address">
-                        {item.resource.address ? item.resource.address.map(adr => (
-                          <div className="det">
-                            {( adr.line && adr.line.join('/') ) +
-                             (adr.city && ', ' + adr.city) +
-                             (adr.state && ', ' + adr.state) +
-                             (adr.postalCode && ' ' + adr.postalCode)}
-                          </div>)) : NoAddress}
-                        <div >{item.resource.telecom && 'Tel. ' + item.resource.telecom[0].value}</div>
-                      </Descriptions.Item>
-              </Descriptions>
+                  <Descriptions.Item label="Full name" span={2}>
+                    {item.resource.name ? item.resource.name.map(name => (
+                      <div>
+                        {name.prefix && name.prefix.join('/') + ' '}
+                        <span className="det">{(name.given && name.given.join(' ')) + (name.family && ' ' + name.family)}</span>
+                        {name.suffix && ' ' + name.suffix.join('/')}
+                      </div>)) : NoName}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Gender">
+                    {item.resource.gender ? item.resource.gender : NoGender}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Qualification" span={2}>
+                    {item.resource.qualification && item.resource.qualification.map((qual, i) => (
+                      <>{qual.code.text ? <span className="det">{qual.code.text}</span> : NoQual}{
+                        item.resource.qualification.length > 1 && i != item.resource.qualification.length - 1 && ' / '
+                      }</>))}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Identifier" span={2}>
+                    {item.resource.identifier && item.resource.identifier.map(( id, i ) => (
+                      <>{id.value ? <span className="det">{id.value}</span> : NoId}
+                        {item.resource.identifier.length > 1 && i != item.resource.identifier.length - 1 && ' / '}</>))}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Address">
+                    {item.resource.address ? item.resource.address.map(adr => (
+                      <div className="det">
+                        {( adr.line && adr.line.join('/') ) +
+                         (adr.city && ', ' + adr.city) +
+                         (adr.state && ', ' + adr.state) +
+                         (adr.postalCode && ' ' + adr.postalCode)}
+                      </div>)) : NoAddress}
+                    <div >{item.resource.telecom && 'Tel. ' + item.resource.telecom[0].value}</div>
+                  </Descriptions.Item>
+                </Descriptions>
               </div>
-                </List.Item>
-            )}/>
+            </List.Item>
+                )}/>
         </TabPane>
-        {/* <TabPane tab="Organization" key="2"> */}
-        {/*   <Search placeholder="Search..." className="searchbar" enterButton="Search" size="large" onSearch={value => getDataOrg(value)} /> */}
-        {/*   <div className="timer">{state.timeOrg && 'Request took ' + state.timeOrg + ' ms'}</div> */}
-        {/*   {<Accordion style={{marginTop: "20px"}}> */}
-        {/*      <List size="large" loading={state.loading} pagination={{pageSize: 30, onChange: ((page, size) => setPage(page))}} dataSource={state.result2} renderItem={ (item, i) => ( */}
-        {/*       <List.Item> */}
-        {/*         <Card style={{width: "100%", background: '#fff', border: 0}}> */}
-        {/*           <Accordion.Toggle className="clickable" as={Card.Header} eventKey={i} style={{padding: "0px 3px", background: '#fff', border: 0}}> */}
-        {/*             <List.Item.Meta */}
-        {/*               title={ */}
-        {/*                 <div className="row"> */}
-        {/*                   {item.resource.name ? */}
-        {/*                    <div className="orgname"> */}
-        {/*                      { item.resource.name } */}
-        {/*                    </div> : NoName */}
-        {/*                   } */}
-        {/*                 </div> */}
-        {/*               } */}
-        {/*               description={ */}
-        {/*                 <div className="row" id="desc"> */}
-        {/*                   {item.resource.address ? */}
-        {/*                     <div className="info"> */}
-        {/*                       {( item.resource.address[0].line && item.resource.address[0].line )  + */}
-        {/*                        ( item.resource.address[0].city && ', ' + item.resource.address[0].city ) + */}
-        {/*                        ( item.resource.address[0].state && ', ' + item.resource.address[0].state ) + */}
-        {/*                        ( item.resource.telecom && (' Tel. ' + item.resource.telecom[0].value)) } */}
-        {/*                     </div> : NoAddress */}
-        {/*                   } */}
-        {/*                   {item.resource.identifier && item.resource.identifier[0].value ? */}
-        {/*                    <div className="info"> */}
-        {/*                      {item.resource.identifier[0].value} */}
-        {/*                    </div> : NoId */}
-        {/*                   } */}
-        {/*                 </div> */}
-        {/*               } /> */}
-        {/*           </Accordion.Toggle> */}
-        {/*           {<Accordion.Collapse eventKey={i}> */}
-        {/*             <Card.Body> */}
-        {/*               <Descriptions layout="vertical" > */}
-        {/*                 <Descriptions.Item label="Type" span={2}> */}
-        {/*                   {item.resource.type ? item.resource.type.map((type, i) => ( */}
-        {/*                     <><span className="det">{type.text && type.text}</span>{ */}
-        {/*                       item.resource.type.length > 1 && i != item.resource.type.length - 1 && ' / ' */}
-        {/*                     }</>)) : NoType} */}
-        {/*                 </Descriptions.Item> */}
-        {/*                 <Descriptions.Item label="Identifier" span={2}> */}
-        {/*                   {item.resource.identifier ? item.resource.identifier.map(( id, i ) => ( */}
-        {/*                     <><span className="det">{id.value}</span> */}
-        {/*                       {item.resource.identifier.length > 1 && i != item.resource.identifier.length - 1 && ' / '}</>)) : NoId} */}
-        {/*                 </Descriptions.Item> */}
-        {/*                 <Descriptions.Item label="Contacts" span={4}> */}
-        {/*                   {item.resource.contact ? item.resource.contact.map(guy => ( guy.name && */}
-        {/*                     <div className="det"> */}
-        {/*                       {(guy.name.given && guy.name.given.join(' ')) + (guy.name.family && ' ' + guy.name.family) + (guy.purpose && ', ' + guy.purpose.coding.code) + (guy.telecom && ', Tel. ' + guy.telecom.value )} */}
-        {/*                     </div> )) : NoContact} */}
-        {/*                 </Descriptions.Item> */}
-        {/*                 <Descriptions.Item label="Address"> */}
-        {/*                   {item.resource.address ? item.resource.address.map(adr => ( */}
-        {/*                     <div className="det"> */}
-        {/*                       {(adr.line && adr.line.join('/')) + (adr.city && ', ' + adr.city ) + (adr.state && ', ' + adr.state ) + (adr.postalCode && ' ' + adr.postalCode )} */}
-        {/*                     </div>)) : NoAddress} */}
-        {/*                 </Descriptions.Item> */}
-        {/*               </Descriptions> */}
-        {/*             </Card.Body> */}
-        {/*           </Accordion.Collapse>} */}
-        {/*         </Card> */}
-        {/*       </List.Item> */}
-        {/*     )}/> */}
-        {/*    </Accordion>} */}
-        {/* </TabPane> */}
+        <TabPane tab="Organization" key="2">
+          <Search placeholder="Search..." className="searchbar" enterButton="Search" size="large" onSearch={value => getDataOrg(value)} />
+          <div className="timer">{state.timeOrg && 'Request took ' + state.timeOrg + ' ms'}</div>
+          <List size="large" loading={state.loading} pagination={{pageSize: 30, onChange: ((page, size) => setPage(page))}} dataSource={state.result2} renderItem={ (item, i) => (
+            <List.Item>
+              <button className="accordion_button" onClick={()=>toggleAccordion(i, 1)}>
+                <List.Item.Meta
+                  title={
+                    <div className="row">
+                      {item.resource.name ?
+                       <div className="orgname">
+                         { item.resource.name }
+                       </div> : NoName
+                      }
+                    </div>
+                  }
+                  description={
+                    <div className="row" id="desc">
+                      {item.resource.address ?
+                       <div className="info">
+                         {( item.resource.address[0].line && item.resource.address[0].line )  +
+                          ( item.resource.address[0].city && ', ' + item.resource.address[0].city ) +
+                          ( item.resource.address[0].state && ', ' + item.resource.address[0].state ) +
+                          ( item.resource.telecom && (' Tel. ' + item.resource.telecom[0].value)) }
+                       </div> : NoAddress
+                      }
+                      {item.resource.identifier && item.resource.identifier[0].value ?
+                       <div className="info">
+                         {item.resource.identifier[0].value}
+                       </div> : NoId
+                      }
+                    </div>
+                  } />
+              </button>
+              <div className="accordion_panel organization" id={i}>
+                <Descriptions layout="vertical" >
+                  <Descriptions.Item label="Type" span={2}>
+                    {item.resource.type ? item.resource.type.map((type, i) => (
+                      <><span className="det">{type.text && type.text}</span>{
+                        item.resource.type.length > 1 && i != item.resource.type.length - 1 && ' / '
+                      }</>)) : NoType}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Identifier" span={2}>
+                    {item.resource.identifier ? item.resource.identifier.map(( id, i ) => (
+                      <><span className="det">{id.value}</span>
+                        {item.resource.identifier.length > 1 && i != item.resource.identifier.length - 1 && ' / '}</>)) : NoId}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Contacts" span={4}>
+                    {item.resource.contact ? item.resource.contact.map(guy => ( guy.name &&
+                                                                                <div className="det">
+                                                                                  {(guy.name.given && guy.name.given.join(' ')) + (guy.name.family && ' ' + guy.name.family) + (guy.purpose && ', ' + guy.purpose.coding.code) + (guy.telecom && ', Tel. ' + guy.telecom.value )}
+                                                                                </div> )) : NoContact}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Address">
+                    {item.resource.address ? item.resource.address.map(adr => (
+                      <div className="det">
+                        {(adr.line && adr.line.join('/')) + (adr.city && ', ' + adr.city ) + (adr.state && ', ' + adr.state ) + (adr.postalCode && ' ' + adr.postalCode )}
+                      </div>)) : NoAddress}
+                  </Descriptions.Item>
+                </Descriptions>
+              </div>
+            </List.Item>
+          )}/>
+        </TabPane>
       </Tabs>
     </div>
   );

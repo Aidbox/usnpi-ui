@@ -22,7 +22,6 @@
     "immutable": "^4.0.0-rc.12",
     "qs": "^6.9.1",
     "react": "^16.11.0",
-    "react-accessible-accordion": "^3.0.1",
     "react-dom": "^16.11.0",
     "react-router-dom": "^5.1.2"
   },
